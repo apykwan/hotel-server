@@ -7,7 +7,7 @@ const queryString = require('query-string');
 
 const stripe = Stripe(process.env.STRIPE_SECRET);
 
-export const createConnectAccount = async (req, res) => {
+exports.createConnectAccount = async (req, res) => {
     // 1. find user from db
     const user = await User.findById(req.user._id);
 
@@ -52,7 +52,7 @@ const updateDelayDays = async accountId => {
     return account;
 };
 
-export const getAccountStatus = async (req, res) => {
+exports.getAccountStatus = async (req, res) => {
     const user = await User.findById(req.user._id);
     const account = await stripe.accounts.retrieve(user.stripe_account_id);
     // console.log('USER ACCOUNT RETRIEVE ', account)
@@ -71,7 +71,7 @@ export const getAccountStatus = async (req, res) => {
     res.json(updatedUser);
 };
 
-export const getAccountBalance = async (req, res) => {
+exports.getAccountBalance = async (req, res) => {
     const user = await User.findById(req.user._id);
     try {
         const balance = await stripe.balance.retrieve({
@@ -84,7 +84,7 @@ export const getAccountBalance = async (req, res) => {
     }
 };
 
-export const payoutSetting = async (req, res) => {
+exports.payoutSetting = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         const loginLink = await stripe.accounts.createLoginLink(
@@ -100,7 +100,7 @@ export const payoutSetting = async (req, res) => {
     }
 };
 
-export const stripeSession = async (req, res) => {
+exports.stripeSession = async (req, res) => {
     // console.log('You Hit stripe session id', req.body.hotelId);
     // 1 get hotel id from req.body
     const { hotelId } = req.body;
@@ -146,7 +146,7 @@ export const stripeSession = async (req, res) => {
     });
 };
 
-export const stripeSuccess = async (req, res) => {
+exports.stripeSuccess = async (req, res) => {
   try {
     // 1 get hotel id from req.body
     const { hotelId } = req.body;

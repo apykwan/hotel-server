@@ -3,7 +3,7 @@ const fs = require('fs');
 const Hotel = require('../models/hotel');
 const Order = require('../models/order');
 
-export const create = async (req, res) => {
+exports.create = async (req, res) => {
     // console.log('req.fields', req.fields);
     // console.log('req.files', req.files);
     try {
@@ -32,7 +32,7 @@ export const create = async (req, res) => {
     }
 };
 
-export const hotels = async (req, res) => {
+exports.hotels = async (req, res) => {
     let all = await Hotel.find({ from: { $gte: new Date() }})
         .limit(24)
         .select('-image.data -__v')
@@ -42,7 +42,7 @@ export const hotels = async (req, res) => {
     res.json(all);
 };
 
-export const image = async (req, res) => {
+exports.image = async (req, res) => {
     let hotel = await Hotel.findById(req.params.hotelId).exec();
     if (hotel && hotel.image && hotel.image.data !== null) {
         res.set('Content-Type', hotel.image.contentType);
@@ -50,7 +50,7 @@ export const image = async (req, res) => {
     }
 };
 
-export const sellerHotels = async (req, res) => {
+exports.sellerHotels = async (req, res) => {
     let all = await Hotel.find({ postedBy: req.user._id })
         .select('-image.data -__v')
         .populate('postedBy', '_id name')
@@ -59,7 +59,7 @@ export const sellerHotels = async (req, res) => {
     res.send(all);
 };
 
-export const removeHotel = async (req, res) => {
+exports.removeHotel = async (req, res) => {
     let removed = await Hotel.findByIdAndDelete(req.params.hotelId)
         .select('-image.data -__v')
         .exec();
@@ -67,7 +67,7 @@ export const removeHotel = async (req, res) => {
     res.json(removed);
 };
 
-export const read = async (req, res) => {
+exports.read = async (req, res) => {
     let hotel = await Hotel.findById(req.params.hotelId)
         .select('-image.data -__v')
         .populate('postedBy', '_id name')
@@ -77,7 +77,7 @@ export const read = async (req, res) => {
     res.json(hotel);
 };
 
-export const updateHotel = async (req, res) => {
+exports.updateHotel = async (req, res) => {
     try {
         let fields = req.fields;
         let files = req.files;
@@ -102,7 +102,7 @@ export const updateHotel = async (req, res) => {
     }
 };
 
-export const userHotelBookings = async (req, res) => {
+exports.userHotelBookings = async (req, res) => {
     const all = await Order.find({ orderedBy: req.user._id })
         .select('session')
         .populate('hotel', '-image.data')
@@ -111,7 +111,7 @@ export const userHotelBookings = async (req, res) => {
     res.json(all);
 };
 
-export const isAlreadyBooked = async (req, res) => {
+exports.isAlreadyBooked = async (req, res) => {
     const { hotelId } = req.params;
     // find orders of the currently logged in user
     const userOrders = await Order.find({ orderedBy: req.user._id })
@@ -128,7 +128,7 @@ export const isAlreadyBooked = async (req, res) => {
     });
 };
 
-export const searchListings = async (req, res) => {
+exports.searchListings = async (req, res) => {
     const { location, date, bed } = req.body;
 
     const fromDate = date.split(",");

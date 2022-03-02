@@ -1,14 +1,14 @@
-import express from 'express';
+const express = require('express');
 
-import { 
+const { 
     createConnectAccount, 
     getAccountStatus, 
     getAccountBalance,
     payoutSetting,
     stripeSession,
     stripeSuccess 
-} from '../controllers/stripe';
-import { requireSignin } from '../middlewares';
+} = require('../controllers/stripe');
+const { requireSignin } = require('../middlewares');
 
 const router = express.Router();
 

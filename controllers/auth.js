@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-export const register = async (req, res) => {
+exports.register = async (req, res) => {
     try {
         const { name, email, password, seller } = req.body;
 
@@ -28,7 +28,7 @@ export const register = async (req, res) => {
     }
 };
 
-export const login = async (req, res) => {
+exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
         let user = await User.findOne({ email })
@@ -39,15 +39,15 @@ export const login = async (req, res) => {
 
         // compare password
         user.comparePassword(password, (err, match) => {
-            console.log('COMPARE PASSWORD IN LOGIN ERR', err);
+            // console.log('COMPARE PASSWORD IN LOGIN ERR', err);
             if (!match || err) return res.status(400).send('wrong password');
-            console.log('GENERATE A TOKEN THEN SEND AS RESPONSE TO CLIENT');
+            // console.log('GENERATE A TOKEN THEN SEND AS RESPONSE TO CLIENT');
         });
 
         // Generate token then send as respose to client
         const token = jwt.sign({ _id: user._id, seller: user.seller }, process.env.JWT_SECRET, { expiresIn: '77d' });
         user.password = undefined;
-        // console.log("LOGIN USER ", user);
+
         res.json({ 
             token, 
             user

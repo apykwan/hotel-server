@@ -3,12 +3,12 @@ const expressJwt = require('express-jwt');
 const Hotel = require('../models/hotel');
 
 // will return req.user
-export const requireSignin = expressJwt({
+exports.requireSignin = expressJwt({
     secret: process.env.JWT_SECRET, 
     algorithms: ["HS256"]
 });
 
-export const hotelOwner = async (req, res, next) => {
+exports.hotelOwner = async (req, res, next) => {
     let hotel = await Hotel.findById(req.params.hotelId).exec();
     let owner = hotel.postedBy._id.toString() === req.user._id.toString();
     
