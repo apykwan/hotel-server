@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema(
   {
@@ -39,7 +39,7 @@ userSchema.pre("save", function (next) {
   if (user.isModified("password")) {
     return bcrypt.hash(user.password, 12, function (err, hash) {
       if (err) {
-        console.log("BCRYPT HASH ERR ", err);
+        // console.log("BCRYPT HASH ERR ", err);
         return next(err);
       }
       user.password = hash;
@@ -57,7 +57,7 @@ userSchema.methods.comparePassword = function(password, next) {
       return next(err, false);
     }
     // if no err, we get null
-    console.log("MATCH PASSWORD", match);
+    // console.log("MATCH PASSWORD", match);
     return next(null, match);
   });
 }
